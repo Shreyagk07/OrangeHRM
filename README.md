@@ -141,4 +141,5 @@ Known limits: source-backed locators and contracts still need live validation; t
 
 Learning: [architecture and scenario walkthrough](docs/architecture.md), [STLC test plan](docs/test-plan.md), [manual cases](docs/manual-cases.md), [RTM](docs/rtm.md), [interview/resume](docs/learning.md), [evidence index](docs/evidence-index.md).
 #   O r a n g e H R M  
+ #   O r a n g e H R M  
  
