@@ -1,0 +1,56 @@
+name: OrangeHRM local QA
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 19 * * *' # 01:00 Asia/Kolkata the following day
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: orangehrm-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      TEST_TAGS: '@regression'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - name: Ephemeral local credentials
+        env:
+          ADMIN_SECRET: ${{ secrets.QA_ADMIN_PASSWORD }}
+        run: |
+          cp .env.example .env
+          python3 - <<'PY'
+          import os,secrets
+          from pathlib import Path
+          values={'MYSQL_ROOT_PASSWORD':secrets.token_hex(24),'MYSQL_PASSWORD':secrets.token_hex(24),'DB_PASSWORD':secrets.token_hex(24),'ADMIN_PASSWORD':os.environ.get('ADMIN_SECRET') or 'Qa!'+secrets.token_hex(16)}
+          lines=Path('.env').read_text().splitlines()
+          Path('.env').write_text('\n'.join(k+'='+values.get(k,v) for k,v in (line.split('=',1) for line in lines))+'\n')
+          for value in values.values(): print('::add-mask::'+value)
+          PY
+          chmod +x mvnw
+      - name: Provision and test
+        run: bash scripts/ci.sh
+      - name: Preserve results even after failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-evidence
+          path: |
+            target/allure-results
+            target/site/allure-maven-plugin
+            target/surefire-reports
+            target/cucumber.json
+          retention-days: 7
+          if-no-files-found: warn
+      - name: Cleanup
+        if: always()
+        run: docker compose down --volumes --remove-orphans

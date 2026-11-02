@@ -1,0 +1,7 @@
+vendor
+.tools
+.allure
+.git
+.env
+target
+benchmark-results

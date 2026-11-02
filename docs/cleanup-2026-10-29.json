@@ -1,0 +1,30 @@
+[
+    {
+        "path":  "vendor\\jdk.zip",
+        "bytes":  191161562
+    },
+    {
+        "path":  "vendor\\maven.zip",
+        "bytes":  9202456
+    },
+    {
+        "path":  "vendor\\orangehrm-5.7.zip",
+        "bytes":  22085736
+    },
+    {
+        "path":  "vendor\\source.zip",
+        "bytes":  12177421
+    },
+    {
+        "path":  "target\\dryrun",
+        "bytes":  3857179
+    },
+    {
+        "path":  "target\\runs\\report-check-1",
+        "bytes":  79096
+    },
+    {
+        "path":  "scripts\\__pycache__",
+        "bytes":  60861
+    }
+]

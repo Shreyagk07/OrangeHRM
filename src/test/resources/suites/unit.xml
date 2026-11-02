@@ -1,0 +1,2 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Utilities"><test name="Utilities"><classes><class name="tests.ExcelTest"/></classes></test></suite>
